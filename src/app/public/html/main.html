@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Notifications</a>
+        </nav>
+    </header>
+    <div class="feed">
+        <div class="post">
+            <div class="profile-info">
+                <img src="https://via.placeholder.com/40" alt="Profile Image">
+                <h3>Username</h3>
+            </div>
+            <div class="post-image">
+                <div class="slider">
+                    <img src="https://via.placeholder.com/300" alt="Post Image">
+                    <img src="https://via.placeholder.com/300" alt="Post Image">
+                    <!-- 다른 이미지들 -->
+                </div>
+                <div class="image-counter">1 / 2</div>
+            </div>
+            <div class="interaction-icons">
+                <div class="item"><a href="#"><i class="material-icons">favorite</i></a></div>
+                <div class="item show-comments"><a href="#"><i class="material-icons">comments</i></a></div>
+            </div>
+            <div class="post-content">
+                <h3>Username</h3>
+                <p>
+                    <span class="first-line">Beautiful sunset! 🌅 #sunset #nature</span>
+                    <span class="more-dots">...</span>
+                    <span class="full-text">A beautiful sunset over the mountains. Nature at its finest.</span>
+                </p>
+                <div class="read-more">더보기</div>
+            </div>
+            <div class="comments">
+                <p>Awesome photo!</p>
+                <p>Where was this taken?</p>
+                <!-- 더 많은 댓글 -->
+            </div>
+        </div>
+
+        <div class="post">
+            <div class="profile-info">
+                <img src="https://via.placeholder.com/40" alt="Profile Image">
+                <h3>Username</h3>
+            </div>
+            <div class="post-image">
+                <img src="https://via.placeholder.com/300" alt="Post Image">
+            </div>
+            <div class="interaction-icons">
+                <div class="item"><a href="#"><i class="material-icons">favorite</i></a></div>
+                <div class="item"><a href="#"><i class="material-icons">comments</i></a></div>
+            </div>
+            <div class="post-content">
+                <h3>Username</h3>
+                <p>Delicious brunch with friends! 🥑🍳 #brunch #foodie</p>
+            </div>
+            <div class="comments">
+                <p>Awesome photo!</p>
+                <p>Where was this taken?</p>
+                <!-- 더 많은 댓글 -->
+            </div>
+        </div>
+
+        <div class="post">
+            <div class="profile-info">
+                <img src="https://via.placeholder.com/40" alt="Profile Image">
+                <h3>Username</h3>
+            </div>
+            <div class="post-image">
+                <img src="https://via.placeholder.com/300" alt="Post Image">
+            </div>
+            <div class="interaction-icons">
+                <div class="item"><a href="#"><i class="material-icons">favorite</i></a></div>
+                <div class="item"><a href="#"><i class="material-icons">comments</i></a></div>
+            </div>
+            <div class="post-content">
+                <h3>Username</h3>
+                <p>Exploring the city streets. 🏙️ #citylife #adventure</p>
+            </div>
+            <div class="comments">
+                <p>Awesome photo!</p>
+                <p>Where was this taken?</p>
+                <!-- 더 많은 댓글 -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="popup-container">
+        <div class="popup-content">
+            <button class="close-popup">&times;</button>
+            <h2>댓글</h2>
+            <ul>
+                <li>댓글 1</li>
+                <li>댓글 2</li>
+                <!-- 다른 댓글들 -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- More posts go here -->
+    <!-- ... -->
+    <footer>
+        <a href="#"><i class="material-icons">home</i></a>
+        <a href="#"><i class="material-icons">search</i></a>
+        <a href="#"><i class="material-icons">add</i></a>
+        <a href="#"><i class="material-icons">notifications</i></a>
+        <a href="#"><i class="material-icons">person</i></a>
+    </footer>
+    <script>
+        let lastScrollPosition = 0;
+        const header = document.querySelector("header");
+
+        window.addEventListener("scroll", () => {
+            const currentScrollPosition = window.scrollY;
+
+            if (currentScrollPosition > lastScrollPosition) {
+                header.classList.add("hidden");
+            } else {
+                header.classList.remove("hidden");
+            }
+
+             // 스크롤이 맨 상단에 있을 때는 헤더를 나타나게 함
+             if (currentScrollPosition <= 0) {
+                header.classList.remove("hidden");
+                header.classList.add("show-header");
+            } else {
+                header.classList.remove("show-header");
+            }
+
+            lastScrollPosition = currentScrollPosition;
+        });
+
+        const sliderContainer = document.querySelector('.slider');
+        const imageCounter = document.querySelector('.image-counter');
+        const images = sliderContainer.querySelectorAll('img');
+        const sliderWidth = sliderContainer.clientWidth;
+
+        let currentIndex = 0;
+
+        function updateImageCounter() {
+            imageCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+        }
+
+        function showImage(index) {
+            const offset = index * -sliderWidth;
+            sliderContainer.style.transform = `translateX(${offset}px)`;
+            currentIndex = index;
+            updateImageCounter();
+        }
+
+        updateImageCounter();
+
+        sliderContainer.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage(currentIndex);
+        });
+
+        // 최초에 첫 번째 이미지 표시
+        showImage(currentIndex);
+
+        const postContents = document.querySelectorAll('.post-content');
+
+        postContents.forEach((content) => {
+            const firstLine = content.querySelector('.first-line');
+            const moreDots = content.querySelector('.more-dots');
+            const fullText = content.querySelector('.full-text');
+            const readMoreButton = content.querySelector('.read-more');
+            
+            if(readMoreButton != null){
+                readMoreButton.addEventListener('click', () => {
+                    if (content.style.maxHeight === '60px') {
+                        fullText.style.display = 'none';
+                        firstLine.style.display = 'none';
+                        moreDots.style.display = 'inline';
+                        readMoreButton.textContent = '더보기';
+                    } else {
+                        content.style.maxHeight = 'none';
+                        moreDots.style.display = 'none';
+                        firstLine.style.display = 'inline';
+                        fullText.style.display = 'inline';
+                        readMoreButton.style.display = 'none';
+                        readMoreButton.textContent = '접기';
+                    }
+                });
+            }
+        });
+
+        const showCommentsButtons = document.querySelectorAll('.show-comments');
+        const popupContainer = document.querySelector('.popup-container');
+        const popupContent = popupContainer.querySelector('.popup-content');
+        const closePopupButton = popupContent.querySelector('.close-popup');
+
+        showCommentsButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                popupContainer.classList.add('active');
+                popupContent.classList.add('active');
+            });
+        });
+
+        closePopupButton.addEventListener('click', () => {
+            popupContainer.classList.remove('active'); // 팝업 비활성화
+            popupContent.classList.remove('active');
+        });
+
+
+    </script>
+</body>
+</html>
