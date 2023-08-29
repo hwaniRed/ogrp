@@ -70,6 +70,31 @@ feed::-webkit-scrollbar {
     margin: 0;
     font-size: 16px;
 }
+
+.slider {
+    width: 100%;
+    height: width;
+    overflow: hidden;
+    border: 1px solid #ccc;
+}
+
+.slides {
+    display: flex;
+    width: 300%;
+}
+
+.slide {
+    flex: 1;
+    min-width: 300px;
+    height: 100%;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 .post .post-image {
     /* ... */
     margin-top: 12px;
@@ -172,9 +197,11 @@ feed::-webkit-scrollbar {
     box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease-in-out; 
     transform: translateY(100%);
-    opacity: 0; /* 초기에 투명하게 설정 */
+    opacity: 1; /* 초기에 투명하게 설정 */
     border-radius: 12px; /* 모서리를 둥글게 */
     height: 90vh; /* 화면 높이만큼 팝업 컨텐츠 높이 설정 */
+    overflow-y: auto;
+    padding-bottom: 60px; /* 댓글 입력 창 높이만큼 여백 확보 */
 }
 
 .popup-content.active {
@@ -192,6 +219,103 @@ feed::-webkit-scrollbar {
     border: none;
     cursor: pointer;
 }
+
+.comment {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.comment-author img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.comment-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-username {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.comment-content p {
+    margin: 0;
+}
+
+.like-comment {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+}
+
+.show-replies {
+    margin-top: 10px;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+}
+
+.comment-input-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.2);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* 원형으로 스타일링 */
+    overflow: hidden;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.comment-input {
+    width : 75%;
+    border: none;
+    outline: none;
+    padding: 8px;
+    margin-left: 8px;
+    margin-right : 8px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.post-button {
+    position: absolute;
+    right: 38px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #3897f0;
+    cursor: pointer;
+}
+
 
 /* 하단 네비게이션 스타일 */
 footer {

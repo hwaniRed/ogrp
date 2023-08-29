@@ -20,10 +20,11 @@
                 <img src="https://via.placeholder.com/40" alt="Profile Image">
                 <h3>Username</h3>
             </div>
-            <div class="post-image">
-                <div class="slider">
-                    <img src="https://via.placeholder.com/300" alt="Post Image">
-                    <img src="https://via.placeholder.com/300" alt="Post Image">
+            <div class="slider">
+                <div class="slides">
+                    <div class="slide" id="sld_1"><img src="https://via.placeholder.com/300" alt="Post Image"></div>
+                    <div class="slide" id="sld_2"><img src="https://via.placeholder.com/300" alt="Post Image"></div>
+                    <div class="slide" id="sld_3"><img src="https://via.placeholder.com/300" alt="Post Image"></div>
                     <!-- 다른 이미지들 -->
                 </div>
                 <div class="image-counter">1 / 2</div>
@@ -99,11 +100,41 @@
         <div class="popup-content">
             <button class="close-popup">&times;</button>
             <h2>댓글</h2>
-            <ul>
-                <li>댓글 1</li>
-                <li>댓글 2</li>
-                <!-- 다른 댓글들 -->
-            </ul>
+            <!-- 댓글 팝업 내부의 댓글 아이템 -->
+            <!-- 댓글 아이템 1 -->
+            <div class="comment">
+                <div class="comment-author">
+                    <img src="https://via.placeholder.com/20" alt="Profile Image">
+                </div>
+                <div class="comment-details">
+                    <div class="comment-username">사용자1</div>
+                    <div class="comment-content">
+                        <p>댓글 본문 내용...</p>
+                    </div>
+                </div>
+                <button class="like-comment"><i class="material-icons">favorite_border</i></button>
+            </div>
+            <!-- 댓글 아이템 2 -->
+            <div class="comment">
+                <div class="comment-author">
+                    <img src="https://via.placeholder.com/20" alt="Profile Image">
+                </div>
+                <div class="comment-details">
+                    <div class="comment-username">사용자2</div>
+                    <div class="comment-content">
+                        <p>댓글 본문 내용...</p>
+                    </div>
+                </div>
+                <button class="like-comment"><i class="material-icons">favorite_border</i></button>
+            </div>
+            <!-- ... 더 많은 댓글 아이템 추가 가능 -->
+            <div class="comment-input-container">
+                <div class="profile-image">
+                    <img src="https://via.placeholder.com/20" alt="Profile Image">
+                </div>
+                <input type="text" class="comment-input" placeholder="댓글을 입력하세요...">
+                <button class="post-button">게시</button>
+            </div>
         </div>
     </div>
 
@@ -117,29 +148,118 @@
         <a href="#"><i class="material-icons">person</i></a>
     </footer>
     <script>
-        let lastScrollPosition = 0;
-        const header = document.querySelector("header");
 
-        window.addEventListener("scroll", () => {
-            const currentScrollPosition = window.scrollY;
+        document.addEventListener('DOMContentLoaded', function(){
+            
+            headerAction();
 
-            if (currentScrollPosition > lastScrollPosition) {
-                header.classList.add("hidden");
-            } else {
-                header.classList.remove("hidden");
-            }
+            sliderSettings();
 
-             // 스크롤이 맨 상단에 있을 때는 헤더를 나타나게 함
-             if (currentScrollPosition <= 0) {
-                header.classList.remove("hidden");
-                header.classList.add("show-header");
-            } else {
-                header.classList.remove("show-header");
-            }
-
-            lastScrollPosition = currentScrollPosition;
+            commentsPopupSetting();
         });
 
+        headerAction = () =>{
+
+            let lastScrollPosition = 0;
+            const header = document.querySelector("header");
+
+            window.addEventListener("scroll", () => {
+                const currentScrollPosition = window.scrollY;
+
+                if (currentScrollPosition > lastScrollPosition) {
+                    header.classList.add("hidden");
+                } else {
+                    header.classList.remove("hidden");
+                }
+
+                // 스크롤이 맨 상단에 있을 때는 헤더를 나타나게 함
+                if (currentScrollPosition <= 0) {
+                    header.classList.remove("hidden");
+                    header.classList.add("show-header");
+                } else {
+                    header.classList.remove("show-header");
+                }
+
+                lastScrollPosition = currentScrollPosition;
+            });
+
+        }
+
+        sliderSettings = () => {
+
+            const slider = document.querySelector('.slider');
+            const slides = document.querySelectorAll('.slide');
+
+            let isDragging = false;
+            let startPos = 0;
+            let currentTranslate = 0;
+            let prevTranslate = 0;
+            let animationID = 0;
+            let currentIndex = 0;
+
+            slides.forEach((slide, index) => {
+            const slideDragStart = (e) => {
+                isDragging = true;
+                startPos = e.touches ? e.touches[0].clientX : e.clientX;
+                animationID = requestAnimationFrame(updateAnimation);
+                slider.classList.add('grabbing');
+            };
+
+            const slideDrag = (e) => {
+                if (!isDragging) return;
+                const currentPosition = e.touches ? e.touches[0].clientX : e.clientX;
+                const move = currentPosition - startPos;
+                currentTranslate = prevTranslate + move;
+            };
+
+            const slideDragEnd = () => {
+                isDragging = false;
+                cancelAnimationFrame(animationID);
+                const moveThreshold = slider.clientWidth / 4;
+                
+                if (Math.abs(currentTranslate - prevTranslate) > moveThreshold) {
+                if (currentTranslate < prevTranslate && currentIndex < slides.length - 1) {
+                    currentIndex++;
+                } else if (currentTranslate > prevTranslate && currentIndex > 0) {
+                    currentIndex--;
+                }
+                }
+                
+                goToSlide(currentIndex);
+                slider.classList.remove('grabbing');
+            };
+
+            const updateAnimation = () => {
+                slider.style.transform = `translateX(${currentTranslate}px)`;
+                if (isDragging) {
+                animationID = requestAnimationFrame(updateAnimation);
+                }
+            };
+
+            const goToSlide = (index) => {
+
+                console.log("index : " , index);
+                
+                currentIndex = index;
+                prevTranslate = currentTranslate = -currentIndex * slider.clientWidth;
+                updateAnimation();
+            };
+
+            slide.addEventListener('mousedown', slideDragStart);
+            slide.addEventListener('touchstart', slideDragStart);
+            slide.addEventListener('mouseup', slideDragEnd);
+            slide.addEventListener('touchend', slideDragEnd);
+            slide.addEventListener('mouseleave', slideDragEnd);
+            slide.addEventListener('mousemove', slideDrag);
+            slide.addEventListener('touchmove', slideDrag);
+            });
+
+            // Prevent text selection during dragging
+            slider.addEventListener('dragstart', (e) => e.preventDefault());
+
+        }
+
+        
         const sliderContainer = document.querySelector('.slider');
         const imageCounter = document.querySelector('.image-counter');
         const images = sliderContainer.querySelectorAll('img');
@@ -195,22 +315,27 @@
             }
         });
 
-        const showCommentsButtons = document.querySelectorAll('.show-comments');
-        const popupContainer = document.querySelector('.popup-container');
-        const popupContent = popupContainer.querySelector('.popup-content');
-        const closePopupButton = popupContent.querySelector('.close-popup');
+        commentsPopupSetting = () =>{
+            const showCommentsButtons = document.querySelectorAll('.show-comments');
+            const popupContainer = document.querySelector('.popup-container');
+            const popupContent = popupContainer.querySelector('.popup-content');
+            const closePopupButton = popupContent.querySelector('.close-popup');
 
-        showCommentsButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-                popupContainer.classList.add('active');
-                popupContent.classList.add('active');
+            showCommentsButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    popupContainer.classList.add('active');
+                    popupContent.classList.add('active');
+                });
             });
-        });
 
-        closePopupButton.addEventListener('click', () => {
-            popupContainer.classList.remove('active'); // 팝업 비활성화
-            popupContent.classList.remove('active');
-        });
+            closePopupButton.addEventListener('click', () => {
+                popupContainer.classList.remove('active'); // 팝업 비활성화
+                popupContent.classList.remove('active');
+            });
+        }
+
+
+        
 
 
     </script>
